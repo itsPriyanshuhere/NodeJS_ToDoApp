@@ -6,31 +6,29 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middlewares/error.js";
 import cors from "cors";
 
-
 export const app = express();
 
 config({
-    path: "./data/config.env",
-    methods: ["GET","POST",'PUT',"DELETE"],
-    credentials: true
-  });
+  path: "./data/config.env",
+});
 
-
-//using middleware
+// Using middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin:[process.env.FRONTEND_URI]
-}));
+
+// Enable CORS with credentials
+const corsOptions = {
+  origin: process.env.FRONTEND_URI, // Allow requests only from this origin
+  credentials: true, // Allow credentials (cookies, HTTP authentication)
+};
+
+app.use(cors(corsOptions));
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/task", taskRouter);
-  
-app.get("/", (req,res) =>{
-    res.send("Nice working");
-});
 
-//post: body , get: params, when we use colon use params othewise use query
-//in case of question mark
+app.get("/", (req, res) => {
+  res.send("Nice working");
+});
 
 app.use(errorMiddleware);
