@@ -19,12 +19,13 @@ config({
 //using middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+  origin:[process.env.FRONTEND_URI]
+}));
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/task", taskRouter);
-  app.use(cors({
-    origin:[process.env.FRONTEND_URI]
-  }));
+  
 app.get("/", (req,res) =>{
     res.send("Nice working");
 });
